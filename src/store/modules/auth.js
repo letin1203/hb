@@ -32,7 +32,17 @@ const actions = {
     commit('loginRequest');
 
     try {
-      const token = await UserService.login(email, password);
+      // const token = await UserService.login(email, password);
+
+      // Intergrate with api later
+      const token =
+        'ya29.QQIBibTwvKkE39hY8mdkT_mXZoRh7Ub9cK9hNsqrxem4QJ6sQa36VHfyuBe' +
+        email +
+        password;
+      TokenService.saveToken(token);
+      TokenService.saveRefreshToken(token);
+      // remove after intergrate
+
       commit('loginSuccess', token);
 
       // Redirect the user to the page he first tried to visit or to the home view
