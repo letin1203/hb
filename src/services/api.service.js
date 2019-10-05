@@ -15,7 +15,7 @@ const ApiService = {
       },
       async error => {
         if (error.request.status == 401) {
-          if (error.config.url.includes('/api/login/')) {
+          if (error.config.url.includes('/api/auth/login')) {
             // Refresh token has failed. Logout the user
             store.dispatch('auth/logout');
             throw error;
@@ -48,9 +48,12 @@ const ApiService = {
   },
 
   setHeader() {
+    // axios.defaults.headers.common[
+    //   'Authorization'
+    // ] = `Bearer ${TokenService.getToken()}`;
     axios.defaults.headers.common[
       'Authorization'
-    ] = `Bearer ${TokenService.getToken()}`;
+    ] = `${TokenService.getToken()}`;
     axios.defaults.headers.common['Content-Type'] = 'application/json';
   },
 
