@@ -26,7 +26,7 @@
                 type="password"
                 outlined
                 placeholder="Password"
-                counter="12"
+                counter="16"
                 v-model="password"
               ></v-text-field>
             </v-form>
