@@ -1,9 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home';
-import Login from './views/Login';
-import Register from './views/Register';
-import Profile from './views/Profile';
 import { StorageService } from './services/storage.service';
 
 Vue.use(Router);
@@ -15,12 +11,13 @@ const router = new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: () => import(/* webpackChunkName: "home" */ './views/Home.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: () =>
+        import(/* webpackChunkName: "login" */ './views/Login.vue'),
       meta: {
         public: true,
         onlyWhenLoggedOut: true
@@ -29,7 +26,8 @@ const router = new Router({
     {
       path: '/register',
       name: 'register',
-      component: Register,
+      component: () =>
+        import(/* webpackChunkName: "register" */ './views/Register.vue'),
       meta: {
         public: true,
         onlyWhenLoggedOut: true
@@ -38,7 +36,8 @@ const router = new Router({
     {
       path: '/profile',
       name: 'profile',
-      component: Profile,
+      component: () =>
+        import(/* webpackChunkName: "profile" */ './views/Profile.vue'),
       meta: {
         public: false
       }
