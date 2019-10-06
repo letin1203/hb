@@ -5,11 +5,17 @@
         <span class="font-weight-light">HOME BUILDER</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn v-if="isAuthenticated" text :to="'/profile'">
+        <span class="mr-2">{{ user.username }}</span>
+      </v-btn>
       <v-btn v-if="isAuthenticated" text @click="logout">
         <span>Logout</span>
       </v-btn>
-      <v-btn v-else text to="/login">
+      <v-btn v-if="!isAuthenticated" text to="/login">
         <span>Login</span>
+      </v-btn>
+      <v-btn v-if="!isAuthenticated" text to="/register">
+        <span>Register</span>
       </v-btn>
     </v-app-bar>
 
@@ -24,7 +30,8 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapGetters({
-      isAuthenticated: 'auth/loggedIn'
+      isAuthenticated: 'auth/loggedIn',
+      user: 'auth/user'
     })
   },
   methods: {

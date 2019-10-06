@@ -1,12 +1,14 @@
-import { UserService, AuthenticationError } from '../../services/user.service';
-import { TokenService } from '../../services/storage.service';
+import { UserService, APIError } from '../../services/user.service';
+import { StorageService } from '../../services/storage.service';
 import router from '../../router';
+import User from '../../models/user';
 
 const state = {
   authenticating: false,
-  accessToken: TokenService.getToken(),
+  accessToken: StorageService.getToken(),
   authenticationErrorCode: 0,
-  authenticationError: ''
+  authenticationError: '',
+  user: new User(StorageService.getUser())
 };
 
 const getters = {
@@ -24,33 +26,45 @@ const getters = {
 
   authenticating: state => {
     return state.authenticating;
+  },
+
+  user: state => {
+    return state.user;
   }
 };
 
 const actions = {
+  async register({ commit }, { email, password }) {
+    try {
+      const response = await UserService.register(email, password);
+      return response;
+    } catch (e) {
+      if (e instanceof APIError) {
+        commit('loginError', {
+          errorCode: e.errorCode,
+          errorMessage: e.message
+        });
+      }
+      return false;
+    }
+  },
+
   async login({ commit }, { email, password }) {
     commit('loginRequest');
 
     try {
-      // const token = await UserService.login(email, password);
-
-      // Intergrate with api later
-      const token =
-        'ya29.QQIBibTwvKkE39hY8mdkT_mXZoRh7Ub9cK9hNsqrxem4QJ6sQa36VHfyuBe' +
-        email +
-        password;
-      TokenService.saveToken(token);
-      TokenService.saveRefreshToken(token);
-      // remove after intergrate
-
-      commit('loginSuccess', token);
+      const response = await UserService.login(email, password);
+      if (response.success) {
+        commit('loginSuccess', response.token);
+        commit('setUser', response.user);
+      }
 
       // Redirect the user to the page he first tried to visit or to the home view
       router.push(router.history.current.query.redirect || '/');
 
       return true;
     } catch (e) {
-      if (e instanceof AuthenticationError) {
+      if (e instanceof APIError) {
         commit('loginError', {
           errorCode: e.errorCode,
           errorMessage: e.message
@@ -88,6 +102,10 @@ const mutations = {
 
   logoutSuccess(state) {
     state.accessToken = '';
+  },
+
+  setUser(state, user) {
+    state.user = new User(user);
   }
 };
 
