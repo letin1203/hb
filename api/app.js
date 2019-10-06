@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var passport = require('passport');
+var cors = require('cors');
 
 mongoose.connect('mongodb://localhost/hb', {
     promiseLibrary: require('bluebird'),
@@ -20,6 +21,7 @@ var categoryRouter = require('./routes/category');
 var postRouter = require('./routes/post');
 
 var app = express();
+app.use(cors());
 app.use(passport.initialize());
 app.use(logger('dev'));
 app.use(express.json());

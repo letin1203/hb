@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TokenService } from '../services/storage.service';
+import { StorageService } from '../services/storage.service';
 import store from '../store';
 
 const ApiService = {
@@ -50,10 +50,10 @@ const ApiService = {
   setHeader() {
     // axios.defaults.headers.common[
     //   'Authorization'
-    // ] = `Bearer ${TokenService.getToken()}`;
+    // ] = `Bearer ${StorageService.getToken()}`;
     axios.defaults.headers.common[
       'Authorization'
-    ] = `${TokenService.getToken()}`;
+    ] = `${StorageService.getToken()}`;
     axios.defaults.headers.common['Content-Type'] = 'application/json';
   },
 

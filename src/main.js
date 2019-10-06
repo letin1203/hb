@@ -5,7 +5,8 @@ import store from './store';
 import './registerServiceWorker';
 import vuetify from './plugins/vuetify';
 import ApiService from './services/api.service';
-import { TokenService } from './services/storage.service';
+import { StorageService } from './services/storage.service';
+import VueRouter from 'vue-router';
 
 Vue.config.productionTip = false;
 
@@ -13,9 +14,11 @@ Vue.config.productionTip = false;
 ApiService.init(process.env.VUE_APP_ROOT_API);
 
 // If token exists set header
-if (TokenService.getToken()) {
+if (StorageService.getToken()) {
   ApiService.setHeader();
 }
+
+Vue.use(VueRouter);
 
 new Vue({
   router,

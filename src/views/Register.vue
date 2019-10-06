@@ -6,7 +6,7 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-toolbar-title>Register form</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
@@ -31,11 +31,22 @@
                     counter="12"
                     v-model="password"
                   ></v-text-field>
+                  <v-text-field
+                    id="confirm-password"
+                    label="Confirm password"
+                    name="password"
+                    prepend-icon="lock"
+                    type="password"
+                    outlined
+                    placeholder="Confirm password"
+                    counter="12"
+                    v-model="confirmPassword"
+                  ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <div class="flex-grow-1"></div>
-                <v-btn @click="handleSubmit" color="primary">Login</v-btn>
+                <v-btn @click="handleSubmit" color="primary">Register</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -54,7 +65,8 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     };
   },
 
@@ -68,17 +80,18 @@ export default {
 
   methods: {
     ...mapActions({
-      login: 'auth/login'
+      register: 'auth/register'
     }),
 
     handleSubmit() {
       // Perform a simple validation that email and password have been typed in
       if (this.email != '' && this.password != '') {
-        this.login({ email: this.email, password: this.password }).then(
+        this.register({ email: this.email, password: this.password }).then(
           response => {
             this.password = '';
+            this.confirmPassword = '';
             if (response.success) {
-              this.$router.push('home');
+              this.$router.push('login');
             }
           }
         );

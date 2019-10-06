@@ -2,7 +2,9 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home';
 import Login from './views/Login';
-import { TokenService } from './services/storage.service';
+import Register from './views/Register';
+import Profile from './views/Profile';
+import { StorageService } from './services/storage.service';
 
 Vue.use(Router);
 
@@ -25,6 +27,23 @@ const router = new Router({
       }
     },
     {
+      path: '/register',
+      name: 'register',
+      component: Register,
+      meta: {
+        public: true,
+        onlyWhenLoggedOut: true
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      meta: {
+        public: false
+      }
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -41,7 +60,7 @@ router.beforeEach((to, from, next) => {
   const onlyWhenLoggedOut = to.matched.some(
     record => record.meta.onlyWhenLoggedOut
   );
-  const loggedIn = !!TokenService.getToken();
+  const loggedIn = !!StorageService.getToken();
 
   if (!isPublic && !loggedIn) {
     return next({

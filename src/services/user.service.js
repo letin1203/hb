@@ -1,7 +1,8 @@
 import ApiService from './api.service';
-import { TokenService } from './storage.service';
+import { StorageService } from './storage.service';
+import Config from '../config/settings';
 
-class AuthenticationError extends Error {
+class APIError extends Error {
   constructor(errorCode, message) {
     super(message);
     this.name = this.constructor.name;
@@ -12,15 +13,39 @@ class AuthenticationError extends Error {
 
 const UserService = {
   /**
-   * Login the user and store the access token to TokenService.
+   * Register the user.
+   *
+   * @returns response({success, msg})
+   * @throws APIError
+   **/
+  register: async function(email, password) {
+    const requestData = {
+      method: 'post',
+      url: Config.API_URL + 'auth/register/',
+      data: {
+        username: email,
+        password: password
+      }
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+      return response.data;
+    } catch (error) {
+      throw new APIError(error.response.status, error.response.data.detail);
+    }
+  },
+
+  /**
+   * Login the user and store the access token to StorageService.
    *
    * @returns access_token
-   * @throws AuthenticationError
+   * @throws APIError
    **/
   login: async function(email, password) {
     const requestData = {
       method: 'post',
-      url: '/api/auth/login/',
+      url: Config.API_URL + 'auth/login/',
       data: {
         grant_type: 'password',
         username: email,
@@ -34,21 +59,20 @@ const UserService = {
 
     try {
       const response = await ApiService.customRequest(requestData);
-
-      TokenService.saveToken(response.data.access_token);
-      TokenService.saveRefreshToken(response.data.refresh_token);
-      ApiService.setHeader();
+      if (response.data.success) {
+        StorageService.saveToken(response.data.token);
+        StorageService.saveUser(response.data.user);
+        //StorageService.saveRefreshToken(response.data.refresh_token);
+        ApiService.setHeader();
+      }
 
       // NOTE: We haven't covered this yet in our ApiService
       //       but don't worry about this just yet - I'll come back to it later
       ApiService.mount401Interceptor();
 
-      return response.data.access_token;
+      return response.data;
     } catch (error) {
-      throw new AuthenticationError(
-        error.response.status,
-        error.response.data.detail
-      );
+      throw new APIError(error.response.status, error.response.data.detail);
     }
   },
 
@@ -56,11 +80,11 @@ const UserService = {
    * Refresh the access token.
    **/
   refreshToken: async function() {
-    const refreshToken = TokenService.getRefreshToken();
+    const refreshToken = StorageService.getRefreshToken();
 
     const requestData = {
       method: 'post',
-      url: '/api/auth/login/',
+      url: Config.API_URL + 'auth/login/',
       data: {
         grant_type: 'refresh_token',
         refresh_token: refreshToken
@@ -74,29 +98,27 @@ const UserService = {
     try {
       const response = await ApiService.customRequest(requestData);
 
-      TokenService.saveToken(response.data.access_token);
-      TokenService.saveRefreshToken(response.data.refresh_token);
+      StorageService.saveToken(response.data.access_token);
+      StorageService.saveRefreshToken(response.data.refresh_token);
       // Update the header in ApiService
       ApiService.setHeader();
 
       return response.data.access_token;
     } catch (error) {
-      throw new AuthenticationError(
-        error.response.status,
-        error.response.data.detail
-      );
+      throw new APIError(error.response.status, error.response.data.detail);
     }
   },
 
   /**
    * Logout the current user by removing the token from storage.
    *
-   * Will also remove `Authorization Bearer <token>` header from future requests.
+   * Will also remove `Authorization <token>` header from future requests.
    **/
   logout() {
     // Remove the token and remove Authorization header from Api Service as well
-    TokenService.removeToken();
-    TokenService.removeRefreshToken();
+    StorageService.removeToken();
+    StorageService.removeRefreshToken();
+    StorageService.removeUser();
     ApiService.removeHeader();
 
     // NOTE: Again, we'll cover the 401 Interceptor a bit later.
@@ -106,4 +128,4 @@ const UserService = {
 
 export default UserService;
 
-export { UserService, AuthenticationError };
+export { UserService, APIError };
