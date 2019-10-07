@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       items: [
-        { title: 'Dashboard', icon: 'dashboard' },
+        { title: 'Home', icon: 'dashboard' },
         { title: 'Account', icon: 'account_box' },
         { title: 'Post a job', icon: 'gavel' }
       ]
