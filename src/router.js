@@ -46,7 +46,9 @@ const router = new Router({
       path: '/post-job',
       name: 'post-job',
       component: () =>
-        import(/* webpackChunkName: "post-job" */ './views/jobs/PostJob.vue'),
+        import(
+          /* webpackChunkName: "post-job" */ './views/projects/PostJob.vue'
+        ),
       meta: {
         public: true
       }
