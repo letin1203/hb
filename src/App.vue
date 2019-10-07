@@ -1,24 +1,7 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light">HOME BUILDER</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn v-if="isAuthenticated" text :to="'/profile'">
-        <span class="mr-2">{{ user.username }}</span>
-      </v-btn>
-      <v-btn v-if="isAuthenticated" text @click="logout">
-        <span>Logout</span>
-      </v-btn>
-      <v-btn v-if="!isAuthenticated" text to="/login">
-        <span>Login</span>
-      </v-btn>
-      <v-btn v-if="!isAuthenticated" text to="/register">
-        <span>Register</span>
-      </v-btn>
-    </v-app-bar>
-
+    <app-bar :isAuthenticated="isAuthenticated" @logout="logout"></app-bar>
+    <navigation :items="items"></navigation>
     <v-content>
       <router-view />
     </v-content>
@@ -27,7 +10,23 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import AppBar from './components/AppBar';
+import Navigation from './components/Navigation';
+
 export default {
+  data() {
+    return {
+      items: [
+        { title: 'Dashboard', icon: 'dashboard' },
+        { title: 'Account', icon: 'account_box' },
+        { title: 'Post a job', icon: 'gavel' }
+      ]
+    };
+  },
+  components: {
+    AppBar,
+    Navigation
+  },
   computed: {
     ...mapGetters({
       isAuthenticated: 'auth/loggedIn',
@@ -41,3 +40,6 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+@import '~@/assets/style';
+</style>
