@@ -10,20 +10,30 @@
       @click.stop="toggleNavigation"
     ></v-app-bar-nav-icon>
     <v-spacer></v-spacer>
-    <v-btn color="deep-purple accent-4" dark class="mr-2" :to="'/post-job'">
-      <span>Post a job</span>
+    <v-btn
+      color="deep-purple accent-4"
+      dark
+      class="mr-2 hidden-sm-and-down"
+      :to="'/post-job'"
+    >
+      <span>Tạo dự án</span>
     </v-btn>
-    <v-btn class="mr-2" v-if="isAuthenticated" text :to="'/profile'">
-      <span>My account</span>
+    <v-btn
+      class="mr-2 hidden-sm-and-down"
+      v-if="isAuthenticated"
+      text
+      :to="'/profile'"
+    >
+      <span>Tài khoản</span>
     </v-btn>
     <v-btn v-if="isAuthenticated" text @click="logout">
-      <span>Logout</span>
+      <span>Thoát tài khoản</span>
     </v-btn>
     <v-btn v-if="!isAuthenticated" text to="/login">
-      <span>Login</span>
+      <span>Đăng nhập</span>
     </v-btn>
     <v-btn v-if="!isAuthenticated" text to="/register">
-      <span>Register</span>
+      <span>Đăng ký</span>
     </v-btn>
   </v-app-bar>
 </template>

@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <h3>Profile of {{ user.username }}</h3>
+        <h3>Thông tin tài khoản</h3>
       </v-col>
     </v-row>
   </v-container>

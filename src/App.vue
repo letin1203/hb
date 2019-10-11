@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <app-bar :isAuthenticated="isAuthenticated" @logout="logout"></app-bar>
-    <navigation :items="items"></navigation>
+    <navigation></navigation>
     <v-content>
       <transition>
         <keep-alive>
@@ -18,15 +18,6 @@ import AppBar from './components/AppBar';
 import Navigation from './components/Navigation';
 
 export default {
-  data() {
-    return {
-      items: [
-        { title: 'Home', icon: 'dashboard' },
-        { title: 'Account', icon: 'account_box' },
-        { title: 'Post a job', icon: 'gavel' }
-      ]
-    };
-  },
   components: {
     AppBar,
     Navigation

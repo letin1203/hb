@@ -11,14 +11,14 @@
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title>John Leider</v-list-item-title>
+        <v-list-item-title>{{ user.username }}</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
     <v-divider></v-divider>
 
     <v-list dense>
-      <v-list-item v-for="item in items" :key="item.title" link>
+      <v-list-item v-for="item in items" :key="item.title" link :to="item.url">
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-item-icon>
@@ -34,22 +34,22 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 export default {
-  props: {
-    items: {
-      type: Array,
-      default() {
-        return [];
-      }
-    }
-  },
   data() {
     return {
-      showNavigation: false
+      showNavigation: false,
+      items: [
+        { title: 'Trang chủ', icon: 'dashboard', url: '/' },
+        { title: 'Tài khoản', icon: 'account_box', url: '/profile' },
+        { title: 'Tạo dự án', icon: 'gavel', url: '/post-job' }
+      ]
     };
   },
   computed: {
     ...mapState('navigation', {
       drawer: 'drawer'
+    }),
+    ...mapState('auth', {
+      user: 'user'
     })
   },
   methods: {
