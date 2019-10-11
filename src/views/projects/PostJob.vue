@@ -18,45 +18,45 @@
           </v-stepper-content>
 
           <v-stepper-step @click="e6 = 2" :complete="e6 > 2" step="2">
-            What work are you looking to undertake?
+            Vui lòng chọn dịch vụ?
           </v-stepper-step>
 
           <v-stepper-content step="2">
-            <list-looking
+            <list-looking class="mb-2"
               :selectedLooking.sync="selectedLooking"
             ></list-looking>
-            <v-btn class="mr-2 mt-2" color="primary" @click="e6 = 3"
-              >Continue</v-btn
+            <v-btn class="mr-2" color="primary" @click="e6 = 3"
+              >Tiếp tục</v-btn
             >
-            <v-btn @click="e6 = 1" text>Quay lại bước 1</v-btn>
+            <v-btn @click="e6 = 1" color="secondary">Quay lại</v-btn>
           </v-stepper-content>
 
           <v-stepper-step @click="e6 = 3" :complete="e6 > 3" step="3">
-            Which fixtures require replacing?
+            Vui lòng chọn thiết bị cần sửa chửa/thay thế?
           </v-stepper-step>
 
           <v-stepper-content step="3">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
+            <list-fixtures class="mb-2"
+              :selectedFixture.sync="selectedFixture"
+            ></list-fixtures>
             <v-btn class="mr-2" color="primary" @click="e6 = 4">Tiếp tục</v-btn>
-            <v-btn @click="e6 = 2" text>Quay lại bước 2</v-btn>
+            <v-btn @click="e6 = 2" color="secondary">Quay lại</v-btn>
           </v-stepper-content>
 
           <v-stepper-step @click="e6 = 4" step="4">
-            Do you require any additional works?
-            <small>Summarize if needed</small>
+            Bạn cần làm thêm gì không?
+            <small>Tóm tắt nếu cần thiết</small>
           </v-stepper-step>
           <v-stepper-content step="4">
-            <v-card
-              color="grey lighten-1"
-              class="mb-12"
-              height="200px"
-            ></v-card>
-            <v-btn color="primary" @click="e6 = 1">Tạo dự án</v-btn>
-            <v-btn @click="e6 = 3" text>Quay lại bước 3</v-btn>
+            <v-textarea
+              outlined
+              name="additional"
+              label="Tóm tắt về dự án"
+              value=""
+              class="mt-2"
+            ></v-textarea>
+            <v-btn color="primary" @click="e6 = 1" class="mr-2">Tạo dự án</v-btn>
+            <v-btn @click="e6 = 3" color="secondary">Quay lại</v-btn>
           </v-stepper-content>
         </v-stepper>
       </v-col>
@@ -66,16 +66,19 @@
 
 <script>
 import ListLooking from './components/ListLooking';
+import ListFixtures from './components/ListFixtures';
 export default {
   components: {
-    ListLooking
+    ListLooking,
+    ListFixtures
   },
   data() {
     return {
       isActive: false,
       e6: 1,
-      categoryItems: ['Phòng tắm', 'Bếp', 'Hệ thống gas', 'Mái nhà'],
-      selectedLooking: []
+      categoryItems: ['Nhà tắm', 'Bếp', 'Hệ thống gas', 'Mái nhà'],
+      selectedLooking: [],
+      selectedFixture: []
     };
   }
 };

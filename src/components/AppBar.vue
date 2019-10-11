@@ -26,7 +26,12 @@
     >
       <span>Tài khoản</span>
     </v-btn>
-    <v-btn v-if="isAuthenticated" text @click="logout">
+    <v-btn
+      class="hidden-sm-and-down"
+      v-if="isAuthenticated"
+      text
+      @click="logout"
+    >
       <span>Thoát tài khoản</span>
     </v-btn>
     <v-btn v-if="!isAuthenticated" text to="/login">
@@ -35,30 +40,28 @@
     <v-btn v-if="!isAuthenticated" text to="/register">
       <span>Đăng ký</span>
     </v-btn>
+    <v-btn class="hidden-md-and-up" text to="/">
+      <span>HOME BUILDER</span>
+    </v-btn>
   </v-app-bar>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
   computed: {
     ...mapState('navigation', {
       drawer: 'drawer'
+    }),
+    ...mapGetters('auth', {
+      isAuthenticated: 'loggedIn'
     })
-  },
-  props: {
-    isAuthenticated: {
-      type: Boolean,
-      default: false
-    }
   },
   methods: {
     ...mapActions({
-      toggleNavigation: 'navigation/toggle'
-    }),
-    logout() {
-      this.$emit('logout');
-    }
+      toggleNavigation: 'navigation/toggle',
+      logout: 'auth/logout'
+    })
   }
 };
 </script>

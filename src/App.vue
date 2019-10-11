@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <app-bar :isAuthenticated="isAuthenticated" @logout="logout"></app-bar>
+    <app-bar></app-bar>
     <navigation></navigation>
     <v-content>
       <transition>
@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
 import AppBar from './components/AppBar';
 import Navigation from './components/Navigation';
 
@@ -21,17 +20,6 @@ export default {
   components: {
     AppBar,
     Navigation
-  },
-  computed: {
-    ...mapGetters({
-      isAuthenticated: 'auth/loggedIn',
-      user: 'auth/user'
-    })
-  },
-  methods: {
-    ...mapActions({
-      logout: 'auth/logout'
-    })
   }
 };
 </script>

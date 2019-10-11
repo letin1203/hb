@@ -12,7 +12,6 @@
 
         <v-list-item-content>
           <v-list-item-title>{{item.title}}</v-list-item-title>
-          <v-list-item-subtitle>{{item.subTitle}}</v-list-item-subtitle>
         </v-list-item-content>
       </template>
     </v-list-item>
@@ -25,10 +24,10 @@ export default {
     return {
       selected: [],
       items: [
-        { title: 'Làm mới', subTitle: 'Xây mới hoàn toàn' },
-        { title: 'Thay thế', subTitle: 'Thay bồn cầu, bồn rửa mặt' },
-        { title: 'Sửa chửa', subTitle: 'Sửa bồn tắm, máy nước nóng...' },
-        { title: 'Dịch vụ khác', subTitle: 'Sơn lại, trang trí thêm...' }
+        { title: 'Bồn cầu' },
+        { title: 'Bồn rửa mặt' },
+        { title: 'Kính nhà tắm' },
+        { title: 'Máy nước nóng' }
       ]
     };
   },
@@ -45,7 +44,7 @@ export default {
       this.selected = newVal;
     },
     selected: function(newVal) {
-      this.$emit('update:selectedLooking', newVal);
+      this.$emit('update:selectedFixture', newVal);
     }
   }
 };
