@@ -3,7 +3,11 @@
     <app-bar :isAuthenticated="isAuthenticated" @logout="logout"></app-bar>
     <navigation :items="items"></navigation>
     <v-content>
-      <router-view />
+      <transition>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+      </transition>
     </v-content>
   </v-app>
 </template>
