@@ -1,6 +1,7 @@
 import ApiService from './api.service';
 import { StorageService } from './storage.service';
 import Config from '../config/settings';
+import store from '../store';
 
 class APIError extends Error {
   constructor(errorCode, message) {
@@ -30,8 +31,15 @@ const UserService = {
 
     try {
       const response = await ApiService.customRequest(requestData);
+      store.dispatch('common/stopLoading');
+      if (!response.data.success) {
+        UserService.showError(response.data.msg);
+      } else {
+        UserService.showSuccess(response.data.msg);
+      }
       return response.data;
     } catch (error) {
+      UserService.showError(error.response.data.msg);
       throw new APIError(error.response.status, error.response.data.detail);
     }
   },
@@ -58,6 +66,7 @@ const UserService = {
     };
 
     try {
+      ApiService.mount401Interceptor();
       const response = await ApiService.customRequest(requestData);
       if (response.data.success) {
         StorageService.saveToken(response.data.token);
@@ -66,12 +75,15 @@ const UserService = {
         ApiService.setHeader();
       }
 
-      // NOTE: We haven't covered this yet in our ApiService
-      //       but don't worry about this just yet - I'll come back to it later
-      ApiService.mount401Interceptor();
-
+      store.dispatch('common/stopLoading');
+      if (!response.data.success) {
+        UserService.showError(response.data.msg);
+      } else {
+        UserService.showSuccess(response.data.msg);
+      }
       return response.data;
     } catch (error) {
+      UserService.showError(error.response.data.msg);
       throw new APIError(error.response.status, error.response.data.detail);
     }
   },
@@ -103,8 +115,15 @@ const UserService = {
       // Update the header in ApiService
       ApiService.setHeader();
 
+      store.dispatch('common/stopLoading');
+      if (!response.data.success) {
+        UserService.showError(response.data.msg);
+      } else {
+        UserService.showSuccess(response.data.msg);
+      }
       return response.data.access_token;
     } catch (error) {
+      UserService.showError(error.response.data.msg);
       throw new APIError(error.response.status, error.response.data.detail);
     }
   },
@@ -123,6 +142,24 @@ const UserService = {
 
     // NOTE: Again, we'll cover the 401 Interceptor a bit later.
     ApiService.unmount401Interceptor();
+  },
+
+  showError(error) {
+    store.dispatch('common/stopLoading');
+    store.dispatch('common/setSnackBar', {
+      show: true,
+      message: error,
+      color: 'error'
+    });
+  },
+
+  showSuccess(msg) {
+    store.dispatch('common/stopLoading');
+    store.dispatch('common/setSnackBar', {
+      show: true,
+      message: msg,
+      color: 'success'
+    })
   }
 };
 

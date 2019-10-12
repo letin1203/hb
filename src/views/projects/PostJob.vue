@@ -94,7 +94,10 @@
             Đăng ký tài khoản
           </v-stepper-step>
           <v-stepper-content step="6">
-            <register-form class="mt-2" :registerModel="registerModel"></register-form>
+            <register-form
+              class="mt-2"
+              :registerModel="registerModel"
+            ></register-form>
             <v-btn color="primary" @click="createJob" class="mr-2">
               Tạo dự án
             </v-btn>
@@ -127,7 +130,8 @@ export default {
       registerModel: {
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        isValid: false
       }
     };
   },

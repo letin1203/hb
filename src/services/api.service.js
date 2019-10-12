@@ -17,7 +17,13 @@ const ApiService = {
         if (error.request.status == 401) {
           if (error.config.url.includes('/api/auth/login')) {
             // Refresh token has failed. Logout the user
-            store.dispatch('auth/logout');
+            // store.dispatch('auth/logout');
+            // store.dispatch('common/setSnackBar', {
+            //   show: true,
+            //   message: error.response.data.msg,
+            //   color: 'error'
+            // });
+            ApiService.unmount401Interceptor();
             throw error;
           } else {
             // Refresh the access token
@@ -62,18 +68,22 @@ const ApiService = {
   },
 
   get(resource) {
+    store.dispatch('common/startLoading');
     return axios.get(resource);
   },
 
   post(resource, data) {
+    store.dispatch('common/startLoading');
     return axios.post(resource, data);
   },
 
   put(resource, data) {
+    store.dispatch('common/startLoading');
     return axios.put(resource, data);
   },
 
   delete(resource) {
+    store.dispatch('common/startLoading');
     return axios.delete(resource);
   },
 
@@ -89,6 +99,7 @@ const ApiService = {
    *    - password
    **/
   customRequest(data) {
+    store.dispatch('common/startLoading');
     return axios(data);
   }
 };

@@ -7,12 +7,22 @@
             <v-toolbar-title>Đăng ký tài khoản</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <register-form :registerModel="registerModel"></register-form>
+            <register-form
+              ref="registerForm"
+              :registerModel="registerModel"
+            ></register-form>
           </v-card-text>
           <v-card-actions>
             <div class="flex-grow-1"></div>
-            <v-btn text :to="'/login'" class="mr-2">Đăng nhập</v-btn>
-            <v-btn @click="handleSubmit" color="primary">Đăng ký</v-btn>
+            <v-btn :disabled="isLoading" text :to="'/login'" class="mr-2"
+              >Đăng nhập</v-btn
+            >
+            <v-btn
+              :disabled="isLoading || !registerModel.isValid"
+              @click="handleSubmit"
+              color="primary"
+              >Đăng ký</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
@@ -21,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import RegisterForm from './components/RegisterForm';
 
 export default {
@@ -34,7 +44,8 @@ export default {
       registerModel: {
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        isValid: false
       }
     };
   },
@@ -44,7 +55,10 @@ export default {
       'authenticating',
       'authenticationError',
       'authenticationErrorCode'
-    ])
+    ]),
+    ...mapState('common', {
+      isLoading: 'isLoading'
+    })
   },
 
   methods: {
@@ -53,19 +67,16 @@ export default {
     }),
 
     handleSubmit() {
-      // Perform a simple validation that email and password have been typed in
-      if (this.registerModel.email != '' && this.registerModel.password != '') {
-        this.register({
-          email: this.registerModel.email,
-          password: this.registerModel.password
-        }).then(response => {
+      this.register({
+        email: this.registerModel.email,
+        password: this.registerModel.password
+      }).then(response => {
+        if (response.success) {
           this.registerModel.password = '';
           this.registerModel.confirmPassword = '';
-          if (response.success) {
-            this.$router.push('login');
-          }
-        });
-      }
+          this.$router.push('login');
+        }
+      });
     }
   }
 };

@@ -7,32 +7,19 @@
             <v-toolbar-title>Đăng nhập tài khoản</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form>
-              <v-text-field
-                label="Email"
-                name="login"
-                prepend-icon="person"
-                type="text"
-                outlined
-                counter="50"
-                v-model="email"
-              ></v-text-field>
-              <v-text-field
-                id="password"
-                label="Mật khẩu"
-                name="password"
-                prepend-icon="lock"
-                type="password"
-                outlined
-                counter="16"
-                v-model="password"
-              ></v-text-field>
-            </v-form>
+            <login-form :loginModel="loginModel"></login-form>
           </v-card-text>
           <v-card-actions>
             <div class="flex-grow-1"></div>
-            <v-btn :to="'/register'" text class="mr-2">Đăng ký</v-btn>
-            <v-btn @click="handleSubmit" color="primary">Đăng nhập</v-btn>
+            <v-btn :disabled="isLoading" :to="'/register'" text class="mr-2"
+              >Đăng ký</v-btn
+            >
+            <v-btn
+              :disabled="isLoading || !loginModel.isValid"
+              @click="handleSubmit"
+              color="primary"
+              >Đăng nhập</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
@@ -41,15 +28,21 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
+import LoginForm from './components/LoginForm';
 
 export default {
-  name: 'login',
+  components: {
+    LoginForm
+  },
 
   data() {
     return {
-      email: '',
-      password: ''
+      loginModel: {
+        email: '',
+        password: '',
+        isValid: false
+      }
     };
   },
 
@@ -58,7 +51,10 @@ export default {
       'authenticating',
       'authenticationError',
       'authenticationErrorCode'
-    ])
+    ]),
+    ...mapState('common', {
+      isLoading: 'isLoading'
+    })
   },
 
   methods: {
@@ -67,17 +63,15 @@ export default {
     }),
 
     handleSubmit() {
-      // Perform a simple validation that email and password have been typed in
-      if (this.email != '' && this.password != '') {
-        this.login({ email: this.email, password: this.password }).then(
-          response => {
-            this.password = '';
-            if (response.success) {
-              this.$router.push('home');
-            }
-          }
-        );
-      }
+      this.login({
+        email: this.loginModel.email,
+        password: this.loginModel.password
+      }).then(response => {
+        this.loginModel.password = '';
+        if (response.success) {
+          this.$router.push('home');
+        }
+      });
     }
   }
 };
