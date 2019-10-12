@@ -7,40 +7,11 @@
             <v-toolbar-title>Đăng ký tài khoản</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
-            <v-form>
-              <v-text-field
-                label="Email"
-                name="login"
-                prepend-icon="person"
-                type="text"
-                outlined
-                counter="50"
-                v-model="email"
-              ></v-text-field>
-              <v-text-field
-                id="password"
-                label="Mật khẩu"
-                name="password"
-                prepend-icon="lock"
-                type="password"
-                outlined
-                counter="16"
-                v-model="password"
-              ></v-text-field>
-              <v-text-field
-                id="confirm-password"
-                label="Nhập lại mật khẩu"
-                name="password"
-                prepend-icon="lock"
-                type="password"
-                outlined
-                counter="16"
-                v-model="confirmPassword"
-              ></v-text-field>
-            </v-form>
+            <register-form :registerModel="registerModel"></register-form>
           </v-card-text>
           <v-card-actions>
             <div class="flex-grow-1"></div>
+            <v-btn text :to="'/login'" class="mr-2">Đăng nhập</v-btn>
             <v-btn @click="handleSubmit" color="primary">Đăng ký</v-btn>
           </v-card-actions>
         </v-card>
@@ -51,15 +22,20 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import RegisterForm from './components/RegisterForm';
 
 export default {
-  name: 'login',
+  components: {
+    RegisterForm
+  },
 
   data() {
     return {
-      email: '',
-      password: '',
-      confirmPassword: ''
+      registerModel: {
+        email: '',
+        password: '',
+        confirmPassword: ''
+      }
     };
   },
 
@@ -78,16 +54,17 @@ export default {
 
     handleSubmit() {
       // Perform a simple validation that email and password have been typed in
-      if (this.email != '' && this.password != '') {
-        this.register({ email: this.email, password: this.password }).then(
-          response => {
-            this.password = '';
-            this.confirmPassword = '';
-            if (response.success) {
-              this.$router.push('login');
-            }
+      if (this.registerModel.email != '' && this.registerModel.password != '') {
+        this.register({
+          email: this.registerModel.email,
+          password: this.registerModel.password
+        }).then(response => {
+          this.registerModel.password = '';
+          this.registerModel.confirmPassword = '';
+          if (response.success) {
+            this.$router.push('login');
           }
-        );
+        });
       }
     }
   }

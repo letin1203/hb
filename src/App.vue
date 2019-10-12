@@ -4,9 +4,7 @@
     <navigation></navigation>
     <v-content>
       <transition>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <router-view></router-view>
       </transition>
     </v-content>
   </v-app>

@@ -31,6 +31,7 @@
           </v-card-text>
           <v-card-actions>
             <div class="flex-grow-1"></div>
+            <v-btn :to="'/register'" text class="mr-2">Đăng ký</v-btn>
             <v-btn @click="handleSubmit" color="primary">Đăng nhập</v-btn>
           </v-card-actions>
         </v-card>

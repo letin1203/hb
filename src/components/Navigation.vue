@@ -22,9 +22,38 @@
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-item-icon>
-
         <v-list-item-content>
           <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item v-if="!isAuthenticated" link :to="'/login'">
+        <v-list-item-icon>
+          <v-icon>account_box</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>
+            Đăng nhập
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item v-else link :to="'/profile'">
+        <v-list-item-icon>
+          <v-icon>account_box</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>
+            Tài khoản
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item v-if="isAuthenticated">
+        <v-list-item-icon>
+          <v-icon>exit_to_app</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>
+            <span @click="logout">Đăng xuất</span>
+          </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -32,14 +61,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
   data() {
     return {
       showNavigation: false,
       items: [
         { title: 'Trang chủ', icon: 'dashboard', url: '/' },
-        { title: 'Tài khoản', icon: 'account_box', url: '/profile' },
         { title: 'Tạo dự án', icon: 'gavel', url: '/post-job' }
       ]
     };
@@ -50,11 +78,15 @@ export default {
     }),
     ...mapState('auth', {
       user: 'user'
+    }),
+    ...mapGetters('auth', {
+      isAuthenticated: 'loggedIn'
     })
   },
   methods: {
     ...mapActions({
-      toggleNavigation: 'navigation/toggle'
+      toggleNavigation: 'navigation/toggle',
+      logout: 'auth/logout'
     }),
     closeDrawer() {
       if (!this.showNavigation) {

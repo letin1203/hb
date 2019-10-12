@@ -34,10 +34,15 @@
     >
       <span>Thoát tài khoản</span>
     </v-btn>
-    <v-btn v-if="!isAuthenticated" text to="/login">
+    <v-btn class="hidden-sm-and-down" v-if="!isAuthenticated" text to="/login">
       <span>Đăng nhập</span>
     </v-btn>
-    <v-btn v-if="!isAuthenticated" text to="/register">
+    <v-btn
+      class="hidden-sm-and-down"
+      v-if="!isAuthenticated"
+      text
+      to="/register"
+    >
       <span>Đăng ký</span>
     </v-btn>
     <v-btn class="hidden-md-and-up" text to="/">
