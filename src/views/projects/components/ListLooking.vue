@@ -11,8 +11,8 @@
         </v-list-item-action>
 
         <v-list-item-content>
-          <v-list-item-title>{{item.title}}</v-list-item-title>
-          <v-list-item-subtitle>{{item.subTitle}}</v-list-item-subtitle>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list-item-subtitle>{{ item.subTitle }}</v-list-item-subtitle>
         </v-list-item-content>
       </template>
     </v-list-item>

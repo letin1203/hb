@@ -22,12 +22,11 @@
           </v-stepper-step>
 
           <v-stepper-content step="2">
-            <list-looking class="mb-2"
+            <list-looking
+              class="mb-2"
               :selectedLooking.sync="selectedLooking"
             ></list-looking>
-            <v-btn class="mr-2" color="primary" @click="e6 = 3"
-              >Tiếp tục</v-btn
-            >
+            <v-btn class="mr-2" color="primary" @click="e6 = 3">Tiếp tục</v-btn>
             <v-btn @click="e6 = 1" color="secondary">Quay lại</v-btn>
           </v-stepper-content>
 
@@ -36,7 +35,8 @@
           </v-stepper-step>
 
           <v-stepper-content step="3">
-            <list-fixtures class="mb-2"
+            <list-fixtures
+              class="mb-2"
               :selectedFixture.sync="selectedFixture"
             ></list-fixtures>
             <v-btn class="mr-2" color="primary" @click="e6 = 4">Tiếp tục</v-btn>
@@ -55,7 +55,9 @@
               value=""
               class="mt-2"
             ></v-textarea>
-            <v-btn color="primary" @click="e6 = 1" class="mr-2">Tạo dự án</v-btn>
+            <v-btn color="primary" @click="e6 = 1" class="mr-2"
+              >Tạo dự án</v-btn
+            >
             <v-btn @click="e6 = 3" color="secondary">Quay lại</v-btn>
           </v-stepper-content>
         </v-stepper>
