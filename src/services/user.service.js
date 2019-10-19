@@ -159,7 +159,7 @@ const UserService = {
       show: true,
       message: msg,
       color: 'success'
-    })
+    });
   }
 };
 
